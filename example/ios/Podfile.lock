@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - umiuni2d_audio (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `/Users/kyorohiro/devDart/flutter/bin/cache/artifacts/engine/ios`)
+  - umiuni2d_audio (from `/Users/kyorohiro/devDart2/umiuni2d_audio/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: /Users/kyorohiro/devDart/flutter/bin/cache/artifacts/engine/ios
+  umiuni2d_audio:
+    :path: /Users/kyorohiro/devDart2/umiuni2d_audio/ios
+
+SPEC CHECKSUMS:
+  Flutter: d674e78c937094a75ac71dd77e921e840bea3dbf
+  umiuni2d_audio: ef9108f8888fb4b32e06466be488466f2a5b6c13
+
+PODFILE CHECKSUM: 351e02e34b831289961ec3558a535cbd2c4965d2
+
+COCOAPODS: 1.3.1

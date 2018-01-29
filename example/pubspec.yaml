@@ -1,0 +1,21 @@
+name: umiuni2d_audio_example
+description: Demonstrates how to use the umiuni2d_audio plugin.
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^0.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  umiuni2d_audio:
+    path: ../
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/bgm_maoudamashii_acoustic09.mp3
