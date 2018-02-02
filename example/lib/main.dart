@@ -100,111 +100,68 @@ class _MyAppState extends sky.State<MyApp> {
       return this;
     }
 
+    String message = "";
     if(label == "Play") {
-      String message = "";
       try {
         message += await _audio.play();
       } catch (e) {
         message +=  e.toString() + '\r\n';
       }
-      setState(() {
-        _message = message;
-      });
-      return this;
     }
     if(label == "Pause") {
-      String message = "";
       try {
         message += await _audio.pause();
       } catch (e) {
         message +=  e.toString() + '\r\n';
       }
-
-      setState(() {
-        _message = message;
-      });
-      return this;
     }
     if(label == "Stop") {
-      String message = "";
       try {
         message += await _audio.stop();
       } catch (e) {
         message +=  e.toString() +'.\r\n';
       }
-
-      setState(() {
-        _message = message;
-      });
-      return this;
     }
     if(label == "+5s") {
-      String message = "";
       try {
         message += await _audio.seek(await _audio.getCurentTime()+5.0);
       } catch (e) {
         message +=  e.toString() +'.\r\n';
       }
-
-      setState(() {
-        _message = message;
-      });
-      return this;
     }
     if(label == "-5s") {
-      String message = "";
       try {
         message += await _audio.seek(await _audio.getCurentTime()-5.0);
       } catch (e) {
         message +=  e.toString() +'.\r\n';
       }
-
-      setState(() {
-        _message = message;
-      });
-      return this;
     }
     if(label == 'volume up') {
-      String message = "";
       try {
         message += await _audio.seek(await _audio.getCurentTime()-5.0);
       } catch (e) {
         message +=  e.toString() +'.\r\n';
       }
-
-      setState(() {
-        _message = message;
-      });
-      return this;
     }
     if(label == 'Volume down') {
-      String message = "";
       try {
         await _audio.setVolume(await _audio.getVolume()-0.1, 1.0);
         message += ""+(await _audio.getVolume()).toString();
       } catch (e) {
         message +=  e.toString() +'.\r\n';
       }
-
-      setState(() {
-        _message = message;
-      });
-      return this;
     }
     if(label == 'Volume up') {
-      String message = "";
       try {
         await _audio.setVolume(await _audio.getVolume()+0.1, 1.0);
         message += ""+(await _audio.getVolume()).toString();
       } catch (e) {
         message +=  e.toString() +'.\r\n';
       }
-
-      setState(() {
-        _message = message;
-      });
-      return this;
     }
+    setState(() {
+      _message = message;
+    });
     return this;
   }
 
