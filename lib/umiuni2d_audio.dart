@@ -16,8 +16,8 @@ class Umiuni2dMedia {
 
   Future<String> getAssetPath(String key) async {
     String path = (await getPath()).replaceAll(new RegExp(r"/$"), "");
-    String keyPath = (await getPath()).replaceAll(new RegExp(r"^/"), "");
-    return path + "/assets/" + keyPath;;
+    String keyPath = (path).replaceAll(new RegExp(r"^/"), "");
+    return path + "/assets/" + key;
   }
 
   Future<String> prepareAssetPath(String key) async {
@@ -28,47 +28,68 @@ class Umiuni2dMedia {
   }
   Future<Umiuni2dMedia> setupFromAssets(String key) async {
     String outputPath = await prepareAssetPath(key);
+    print("=TEST="+outputPath);
     service.AssetBundle bundle =  (service.rootBundle != null) ? service.rootBundle : new service.NetworkAssetBundle(new Uri.directory(Uri.base.origin));
     service.ByteData data = await bundle.load(key);
     File output = new File(outputPath);
     await output.writeAsBytes(data.buffer.asUint8List(),flush: true);
     return this;
   }
-  Future<Umiuni2dAudio> load(String key) async {
+  Map<String, Umiuni2dAudio> _audioMap = {};
+  Future<Umiuni2dAudio> load(String id, String key) async {
     String path = await getAssetPath(key);
-    String ret = await _channel.invokeMethod('load',[path]);
-    return new Umiuni2dAudio();
+    Umiuni2dAudio ret =  new Umiuni2dAudio(id, path);
+    await ret.load();
+    _audioMap[id] = ret;
+    return ret;
+  }
+
+  Umiuni2dAudio getAudio(String id) {
+    return _audioMap[id];
   }
 }
 
 
 class Umiuni2dAudio {
-  Umiuni2dAudio();
+  String _id;
+  String _path;
+
+  String get id => _id;
+  String get path => _path;
+  Umiuni2dAudio(String id, String path){
+    this._id = id;
+    this._path = path;
+  }
+
+  Future<String> load() async {
+    return  await Umiuni2dMedia._channel.invokeMethod('load',[_id, _path]);
+  }
+
   Future<String> play() async {
-    return Umiuni2dMedia._channel.invokeMethod('play');
+    return await Umiuni2dMedia._channel.invokeMethod('play',[_id]);
   }
 
   Future<String> pause() async {
-    return Umiuni2dMedia.channel.invokeMethod('pause');
+    return Umiuni2dMedia.channel.invokeMethod('pause',[_id]);
   }
 
   Future<String> stop() async {
-    return Umiuni2dMedia.channel.invokeMethod('stop');
+    return Umiuni2dMedia.channel.invokeMethod('stop',[_id]);
   }
 
   Future<String> seek(double currentTime) async {
-    return Umiuni2dMedia.channel.invokeMethod('seek',[currentTime]);
+    return Umiuni2dMedia.channel.invokeMethod('seek',[_id,currentTime]);
   }
 
   Future<num> getCurentTime() async {
-    return Umiuni2dMedia.channel.invokeMethod('getCurentTime');
+    return Umiuni2dMedia.channel.invokeMethod('getCurentTime',[_id]);
   }
 
   Future<num> setVolume(num volume, num interval) async {
-    return Umiuni2dMedia.channel.invokeMethod('setVolume', [volume, interval]);
+    return Umiuni2dMedia.channel.invokeMethod('setVolume',[_id, volume, interval]);
   }
 
   Future<num> getVolume() async {
-    return Umiuni2dMedia.channel.invokeMethod('getVolume');
+    return Umiuni2dMedia.channel.invokeMethod('getVolume',[_id]);
   }
 }

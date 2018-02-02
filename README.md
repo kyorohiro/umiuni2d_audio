@@ -8,6 +8,10 @@ audio plugin for umiuni2d
 
 http://maoudamashii.jokersounds.com/music_rule.html
 
+## bgm_maoudamashii_lastboss0.mp3 has following license.
+
+http://maoudamashii.jokersounds.com/music_rule.html
+
 ## Other
 
 no license
