@@ -11,7 +11,8 @@ class MyApp extends sky.StatefulWidget {
 }
 
 class _MyAppState extends sky.State<MyApp> {
-  Umiuni2dAudio _player;
+  Umiuni2dMedia _player;
+  Umiuni2dAudio _audio;
   String _message = 'Unknown';
 
   _MyAppStat() {
@@ -24,7 +25,7 @@ class _MyAppState extends sky.State<MyApp> {
   }
 
   initPlatformState() async {
-    _player = new Umiuni2dAudio();
+    _player = new Umiuni2dMedia();
 
     new Future.delayed(new Duration(seconds: 0)).then((dynamic d) async {
       String message = "";
@@ -36,7 +37,8 @@ class _MyAppState extends sky.State<MyApp> {
         } else {
           message += "# no exist" + '\r\n';
         }
-        message += await _player.load("assets/bgm_maoudamashii_acoustic09.mp3");
+        _audio = await _player.load("assets/bgm_maoudamashii_acoustic09.mp3");
+        message += "# ok"+ '\r\n';
       } catch (e) {
         message += "# " + e.toString() + '\r\n';
       }
@@ -101,7 +103,7 @@ class _MyAppState extends sky.State<MyApp> {
     if(label == "Play") {
       String message = "";
       try {
-        message += await _player.play();
+        message += await _audio.play();
       } catch (e) {
         message +=  e.toString() + '\r\n';
       }
@@ -113,7 +115,7 @@ class _MyAppState extends sky.State<MyApp> {
     if(label == "Pause") {
       String message = "";
       try {
-        message += await _player.pause();
+        message += await _audio.pause();
       } catch (e) {
         message +=  e.toString() + '\r\n';
       }
@@ -126,7 +128,7 @@ class _MyAppState extends sky.State<MyApp> {
     if(label == "Stop") {
       String message = "";
       try {
-        message += await _player.stop();
+        message += await _audio.stop();
       } catch (e) {
         message +=  e.toString() +'.\r\n';
       }
@@ -139,7 +141,7 @@ class _MyAppState extends sky.State<MyApp> {
     if(label == "+5s") {
       String message = "";
       try {
-        message += await _player.seek(await _player.getCurentTime()+5.0);
+        message += await _audio.seek(await _audio.getCurentTime()+5.0);
       } catch (e) {
         message +=  e.toString() +'.\r\n';
       }
@@ -152,7 +154,7 @@ class _MyAppState extends sky.State<MyApp> {
     if(label == "-5s") {
       String message = "";
       try {
-        message += await _player.seek(await _player.getCurentTime()-5.0);
+        message += await _audio.seek(await _audio.getCurentTime()-5.0);
       } catch (e) {
         message +=  e.toString() +'.\r\n';
       }
@@ -165,7 +167,7 @@ class _MyAppState extends sky.State<MyApp> {
     if(label == 'volume up') {
       String message = "";
       try {
-        message += await _player.seek(await _player.getCurentTime()-5.0);
+        message += await _audio.seek(await _audio.getCurentTime()-5.0);
       } catch (e) {
         message +=  e.toString() +'.\r\n';
       }
@@ -178,8 +180,8 @@ class _MyAppState extends sky.State<MyApp> {
     if(label == 'Volume down') {
       String message = "";
       try {
-        await _player.setVolume(await _player.getVolume()-0.1, 1.0);
-        message += ""+(await _player.getVolume()).toString();
+        await _audio.setVolume(await _audio.getVolume()-0.1, 1.0);
+        message += ""+(await _audio.getVolume()).toString();
       } catch (e) {
         message +=  e.toString() +'.\r\n';
       }
@@ -192,8 +194,8 @@ class _MyAppState extends sky.State<MyApp> {
     if(label == 'Volume up') {
       String message = "";
       try {
-        await _player.setVolume(await _player.getVolume()+0.1, 1.0);
-        message += ""+(await _player.getVolume()).toString();
+        await _audio.setVolume(await _audio.getVolume()+0.1, 1.0);
+        message += ""+(await _audio.getVolume()).toString();
       } catch (e) {
         message +=  e.toString() +'.\r\n';
       }
