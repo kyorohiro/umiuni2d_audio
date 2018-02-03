@@ -3,6 +3,12 @@
 
 @implementation Umiuni2dAudioPlugin
 
+- (id)init{
+    self = [super init];
+    self.players = [NSMutableDictionary dictionary];
+    return self;
+}
+
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   FlutterMethodChannel* channel = [FlutterMethodChannel
       methodChannelWithName:@"umiuni2d_audio"
@@ -25,12 +31,15 @@
     NSArray *args = call.arguments;
     NSArray *playerId = args[0];
 
+
+
     if([methodName isEqualToString:@"load"]){
         NSString *path = args[1];
         NSError* error = nil;
         NSURL *url = [[NSURL alloc] initFileURLWithPath:path];
-        self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-        if(!self.player) {
+        AVAudioPlayer* player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+        self.players[playerId] = player;
+        if(!player) {
             result(@"{\"status\":\"failed\"}");
             return;
         } else {
@@ -38,12 +47,18 @@
             return;
         }
     } else {
-        if(!self.player) {
+        BOOL hasPlayerId = [[self.players allKeys] containsObject:playerId];
+        if(false == hasPlayerId) {
+            result(@"{\"status\":\"failed\"}");
+            return;
+        }
+        AVAudioPlayer* player = self.players[playerId];
+        if(!player) {
             result(@"{\"status\":\"failed\"}");
             return;
         }
         if([methodName isEqualToString:@"play"]){
-            BOOL ret = [self.player play];
+            BOOL ret = [player play];
             if(!ret) {
                 result(@"{\"status\":\"failed\"}");
             } else {
@@ -51,30 +66,30 @@
             }
             return;
         } else if([methodName isEqualToString:@"pause"]){
-            [self.player pause];
+            [player pause];
             result(@"{\"status\":\"passed\"}");
             return;
         } else if([methodName isEqualToString:@"stop"]){
-            [self.player stop];
+            [player stop];
             result(@"{\"status\":\"passed\"}");
             return;
         } else if([methodName isEqualToString:@"seek"]){
             NSNumber *num = args[1];
-            self.player.currentTime = [num doubleValue];
+            player.currentTime = [num doubleValue];
             result(@"{\"status\":\"passed\"}");
             return;
         } else if([methodName isEqualToString:@"getCurentTime"]){
-            result([[NSNumber alloc] initWithDouble:self.player.currentTime]);
+            result([[NSNumber alloc] initWithDouble:player.currentTime]);
             return;
         } else if([methodName isEqualToString:@"setVolume"]){
             NSArray *args = call.arguments;
             NSNumber *volume = args[1];
             NSNumber *interval = args[2];
-            [self.player setVolume:[volume floatValue] fadeDuration:[interval doubleValue]];
+            [player setVolume:[volume floatValue] fadeDuration:[interval doubleValue]];
             result(@"{\"status\":\"passed\"}");
             return;
         } else if([methodName isEqualToString:@"getVolume"]){
-            result([[NSNumber alloc] initWithDouble:self.player.volume]);
+            result([[NSNumber alloc] initWithDouble:player.volume]);
             return;
         }
         
