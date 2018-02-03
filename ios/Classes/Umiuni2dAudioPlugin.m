@@ -19,9 +19,14 @@
 
     if([methodName isEqualToString:@"getPath"]){
         result(NSSearchPathForDirectoriesInDomains(NSLibraryDirectory,NSUserDomainMask, YES)[0]);
-    } else if([methodName isEqualToString:@"load"]){
-        NSArray *args = call.arguments;
-        NSString *path = args[0];
+        return;
+    }
+
+    NSArray *args = call.arguments;
+    NSArray *playerId = args[0];
+
+    if([methodName isEqualToString:@"load"]){
+        NSString *path = args[1];
         NSError* error = nil;
         NSURL *url = [[NSURL alloc] initFileURLWithPath:path];
         self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
@@ -54,8 +59,7 @@
             result(@"{\"status\":\"passed\"}");
             return;
         } else if([methodName isEqualToString:@"seek"]){
-            NSArray *args = call.arguments;
-            NSNumber *num = args[0];
+            NSNumber *num = args[1];
             self.player.currentTime = [num doubleValue];
             result(@"{\"status\":\"passed\"}");
             return;
@@ -64,8 +68,8 @@
             return;
         } else if([methodName isEqualToString:@"setVolume"]){
             NSArray *args = call.arguments;
-            NSNumber *volume = args[0];
-            NSNumber *interval = args[1];
+            NSNumber *volume = args[1];
+            NSNumber *interval = args[2];
             [self.player setVolume:[volume floatValue] fadeDuration:[interval doubleValue]];
             result(@"{\"status\":\"passed\"}");
             return;
