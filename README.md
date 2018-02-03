@@ -1,3 +1,6 @@
+move to https://github.com/kyorohiro/umiuni2d_media/
+
+
 # umiuni2d_audio
 audio plugin for umiuni2d
 
